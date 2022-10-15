@@ -1,0 +1,138 @@
+{
+  "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
+  "width": "container",
+  "height": 550,
+  "title": "GDP per capita vs Suicide Rate",
+  "data": {
+    "url": "https://raw.githubusercontent.com/kongpuifun/3179/main/master.csv"
+  },
+  "params": [
+    {
+      "name": "Population_Above",
+      "value": 0,
+      "bind": {
+        "input": "range",
+        "min": 0,
+        "max": 100000000,
+        "step": 1000000,
+        "name": "Minimum Population: "
+      }
+    },
+    {
+      "name": "Age_selection",
+      "bind": {
+        "input": "select",
+        "options": [
+          null,
+          "5-14 years",
+          "15-24 years",
+          "25-34 years",
+          "35-54 years",
+          "55-74 years",
+          "75+ years"
+        ],
+        "labels": [
+          "Show All",
+          "5-14 years",
+          "15-24 years",
+          "25-34 years",
+          "35-54 years",
+          "55-74 years",
+          "75+ years"
+        ],
+        "name": "Age Selection: "
+      }
+    }
+  ],
+  "transform": [
+    {"filter": "datum['gdp_per_capita ($)'] > 0"},
+    {"filter": "datum['population'] > Population_Above"},
+    {"filter": "Age_selection == null || datum.age == Age_selection"}
+  ],
+  "encoding": {
+    "x": {
+      "field": "gdp_per_capita ($)",
+      "type": "quantitative",
+      "title": "GDP per capita ($)"
+    },
+    "y": {
+      "field": "suicides/100k pop",
+      "type": "quantitative",
+      "title": "Suicide per 100,000 people"
+    }
+  },
+  "config":{
+    "background": "rgb(250, 245, 229)",
+    "view": {"stroke": null}
+  },
+  "layer": [
+    {
+      "mark": "circle",
+      "encoding": {
+        "size": {
+          "field": "population",
+          "type": "quantitative",
+          "scale": {
+            "type": "threshold",
+            "domain": [1000000, 10000000, 50000000, 100000000, 500000000],
+            "range": [10, 50, 150, 200, 300, 400]
+          },
+          "legend": {"format": ".1s"}
+        },
+        "color": {
+          "field": "age",
+          "type": "nominal",
+          "scale": {
+            "domain": [
+              "5-14 years",
+              "15-24 years",
+              "25-34 years",
+              "35-54 years",
+              "55-74 years",
+              "75+ years"
+            ],
+            "range": [
+              "#e41a1c",
+              "#984ea3",
+              "#ff7f00",
+              "#a6cee3",
+              "#377eb8",
+              "#a65628"
+            ]
+          }
+        },
+        "opacity": {"value": 0.6},
+        "tooltip": [
+          {"field": "country", "type": "nominal"},
+          {"field": "suicides/100k pop", "type": "quantitative", "format": ","},
+          {
+            "field": "gdp_per_capita ($)",
+            "type": "quantitative",
+            "format": ","
+          }
+        ]
+      }
+    },
+    {
+      "mark": {
+        "type": "text",
+        "align": "right",
+        "baseline": "middle",
+        "dx": -12,
+        "fontSize": 11.5,
+        "fontStyle": "italic"
+      },
+      "encoding": {
+        "tooltip": [
+          {"field": "country", "type": "nominal"},
+          {"field": "suicides/100k pop", "type": "quantitative", "format": ","},
+          {
+            "field": "gdp_per_capita ($)",
+            "type": "quantitative",
+            "format": ","
+          }
+        ]
+      }
+    }
+  ]
+}
