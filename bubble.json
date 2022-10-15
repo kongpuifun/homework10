@@ -4,7 +4,7 @@
     "height": 600,
     "title": "World Suicide Cases (2000-2016)",
     "data": {
-      "url": "https://raw.githubusercontent.com/kongpuifun/3179/main/master.csv"
+      "url": "https://raw.githubusercontent.com/kongpuifun/homework10/main/master.csv"
     },
     "params": [
       {
