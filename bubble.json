@@ -120,6 +120,15 @@
           "fontStyle": "italic"
         },
         "encoding": {
+          "text": {"field": "country", "type": "nominal"},
+          "color": {"value": "black"},
+          "opacity": {
+            "condition": {
+              "test": "datum['country'] =='Australia'",
+              "value": 1
+            },
+          "value":0
+          },
           "tooltip": [
             {"field": "country", "type": "nominal"},
             {"field": "suicides/100k pop", "type": "quantitative", "format": ","},
