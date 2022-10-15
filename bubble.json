@@ -1,7 +1,7 @@
 {
   "$schema": "https://vega.github.io/schema/vega-lite/v5.json",
-  "width": "container",
-  "height": 550,
+  "width": 600,
+  "height": 400,
   "title": "GDP per capita vs Suicide Rate",
   "data": {
     "url": "https://raw.githubusercontent.com/kongpuifun/3179/main/master.csv"
@@ -45,13 +45,21 @@
     }
   ],
   "transform": [
-    {"filter": "datum['gdp_per_capita ($)'] > 0"},
+    {
+        "aggregate": [{
+         "op": "sum",
+         "field": "gdp_per_capita ($)",
+         "as": "GDP"
+        }],
+        "groupby": ["country","age"]
+      },
+    {"filter": "datum['GDP'] > 0"},
     {"filter": "datum['population'] > Population_Above"},
     {"filter": "Age_selection == null || datum.age == Age_selection"}
   ],
   "encoding": {
     "x": {
-      "field": "gdp_per_capita ($)",
+      "field": "GDP",
       "type": "quantitative",
       "title": "GDP per capita ($)"
     },
@@ -60,10 +68,6 @@
       "type": "quantitative",
       "title": "Suicide per 100,000 people"
     }
-  },
-  "config":{
-    "background": "rgb(250, 245, 229)",
-    "view": {"stroke": null}
   },
   "layer": [
     {
@@ -106,7 +110,7 @@
           {"field": "country", "type": "nominal"},
           {"field": "suicides/100k pop", "type": "quantitative", "format": ","},
           {
-            "field": "gdp_per_capita ($)",
+            "field": "GDP",
             "type": "quantitative",
             "format": ","
           }
@@ -123,11 +127,17 @@
         "fontStyle": "italic"
       },
       "encoding": {
+        "text": {"field": "country", "type": "nominal"},
+        "color": {"value": "black"},
+        "opacity": {
+          "condition": {"test": "datum['country'] == 'Australia'", "value": 1},
+          "value": 0
+        },
         "tooltip": [
           {"field": "country", "type": "nominal"},
           {"field": "suicides/100k pop", "type": "quantitative", "format": ","},
           {
-            "field": "gdp_per_capita ($)",
+            "field": "GDP",
             "type": "quantitative",
             "format": ","
           }
